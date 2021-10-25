@@ -1,0 +1,7 @@
+INDEX VERSION 1.4+/home/guada/Desarrollo/stacktrace_2/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+849576186.index
+1263446296.index
+1391461933.index
+852407150.index
+1791228339.index
+3000651287.index

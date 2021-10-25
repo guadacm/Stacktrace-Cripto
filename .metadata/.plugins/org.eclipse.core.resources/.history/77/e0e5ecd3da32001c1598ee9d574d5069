@@ -1,0 +1,5 @@
+package com.example.model.copy;
+
+public class Usuario {
+
+}

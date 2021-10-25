@@ -1,0 +1,13 @@
+package com.example.demo.services;
+
+import java.util.List;
+
+import com.example.demo.models.Usuario;
+
+public interface UsuarioService {
+	public List<Usuario> getUsuarios();
+	public String getUsuarioById(Long userId);
+	public String registrarUsuario(Usuario usuario);
+	public String update(Usuario usuario);
+	public boolean deleteUsuario(Long id);
+}

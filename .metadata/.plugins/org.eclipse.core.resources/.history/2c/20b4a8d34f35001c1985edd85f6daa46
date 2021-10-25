@@ -1,0 +1,96 @@
+package com.example.demo.models;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Entity
+@Table(name = "saldosdivisas")
+public class SaldoDivisa {
+
+	public SaldoDivisa(String divisaTipo, Billetera billetera) {
+		//this.billeteraId = billeteraId;
+		this.divisaTipo = divisaTipo;
+		this.divisaSaldo = 0;
+		this.billetera = billetera;
+	}
+	
+	public SaldoDivisa(String divisaTipo) {
+		//this.billeteraId = billeteraId;
+		this.divisaTipo = divisaTipo;
+		this.divisaSaldo = 0;
+		//this.billetera = billetera;
+	}
+
+	public SaldoDivisa() {
+	}
+
+	@Schema(hidden = true)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "saldosid")
+	private Long saldoId;
+
+	/*@Column(name = "billeteraid")
+	private Long billeteraId;*/
+
+	@Column(name = "divisatipo")
+	private String divisaTipo;
+
+	@Column(name = "divisasaldo")
+	private float divisaSaldo;
+
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "billeteraid", nullable = false)
+	private Billetera billetera;
+
+	@JsonIgnore
+	public Billetera getBilletera() {
+		return billetera;
+	}
+
+	public void setBilletera(Billetera billetera) {
+		this.billetera = billetera;
+	}
+	@JsonIgnore
+	public Long getSaldoId() {
+		return saldoId;
+	}
+
+	public void setSaldoId(Long saldoId) {
+		this.saldoId = saldoId;
+	}
+
+	public String getDivisaTipo() {
+		return divisaTipo;
+	}
+
+	public void setDivisaTipo(String divisaTipo) {
+		this.divisaTipo = divisaTipo;
+	}
+
+	public float getDivisaSaldo() {
+		return divisaSaldo;
+	}
+
+	public void setDivisaSaldo(float divisaSaldo) {
+		this.divisaSaldo += divisaSaldo;
+	}
+
+	/*public String toString() {
+		StringBuilder json = new StringBuilder();
+		json.append("{\"" + this.getDivisaTipo() + "\": \"" + this.getDivisaSaldo() + "\"}");
+		return json.toString();
+	}*/
+}

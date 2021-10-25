@@ -1,0 +1,45 @@
+package com.example.demo.services;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.example.demo.models.Divisa;
+import com.example.demo.repositries.DivisaRepository;
+
+public class DivisaServiceImpl implements DivisaService{
+
+	@Autowired
+	DivisaRepository repository;
+	
+	@Override
+	public boolean deleteDivisa(String divisaTipo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Divisa> getDivisas() {
+		return repository.findAll();
+	}
+
+	@Override
+	public Divisa getDivisaById(String divisaTipo) {
+		divisaTipo.toUpperCase();
+		Optional<Divisa> divisa = repository.findById(divisaTipo);
+		if(!divisa.isEmpty()) return divisa.get();
+		else return null;
+	}
+
+	@Override
+	public Divisa registrarDivisa(Divisa divisa) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Divisa update(Divisa divisa) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,66 @@
+package com.example.demo.services;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.demo.models.Billetera;
+import com.example.demo.models.Divisa;
+import com.example.demo.models.SaldoDivisa;
+import com.example.demo.repositries.DivisaRepository;
+
+public class DivisaServiceImpl implements DivisaService{
+
+	@Autowired
+	DivisaRepository repository;
+	
+	@Autowired
+	BilleteraService billeteraService;
+	
+	@Autowired
+	SaldoDivisaService saldoDivisaService;
+	
+	@Override
+	public boolean deleteDivisa(String divisaTipo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Divisa> getDivisas() {
+		return repository.findAll();
+	}
+
+	@Override
+	public Divisa getDivisaById(String divisaTipo) {
+		divisaTipo.toUpperCase();
+		Optional<Divisa> divisa = repository.findById(divisaTipo);
+		if(!divisa.isEmpty()) return divisa.get();
+		else return null;
+	}
+
+	@Override
+	public Divisa registrarDivisa(Divisa divisa) {
+		divisa.toUpperCase();
+        if (repository.findById(divisa.getDivisaTipo()).isEmpty()) {
+            Divisa nueva = repository.save(divisa);
+            List<Billetera> billeteras = billeteraService.getBilleteras();
+            if (!billeteras.isEmpty()) {
+                for (int i = 0; i < billeteras.size(); i++) {
+                    SaldoDivisa ad = new SaldoDivisa(divisa.getDivisaTipo(), billeteras.get(i));
+                    SaldoDivisaService.save(ad);
+                }
+            }
+            return nueva;
+        } else
+            return null;
+	}
+
+	@Override
+	public Divisa update(Divisa divisa) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

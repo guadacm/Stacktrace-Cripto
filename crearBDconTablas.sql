@@ -20,10 +20,11 @@ CREATE TABLE `stacktrace`.`divisas` (
 
 CREATE TABLE `stacktrace`.`billeteras` ( 
     `billeteraid` BIGINT NOT NULL AUTO_INCREMENT , 
-    `userid` BIGINT NOT NULL ,
+    `userid` BIGINT DEFAULT NULL ,
     `pesos` FLOAT NOT NULL ,
     `saldototal` FLOAT NOT NULL ,
-    PRIMARY KEY (`billeteraid`)
+    PRIMARY KEY (`billeteraid`),
+    FOREIGN KEY (`userid`) REFERENCES `usuarios`(`userid`) ON DELETE SET NULL
 );
 
 CREATE TABLE `stacktrace`.`saldosdivisas` ( 
@@ -32,7 +33,7 @@ CREATE TABLE `stacktrace`.`saldosdivisas` (
     `divisatipo` VARCHAR(10) NOT NULL , 
     `divisasaldo` FLOAT NOT NULL , 
     PRIMARY KEY (`saldosid`),
-    FOREIGN KEY (`billeteraid`) REFERENCES `billeteras`(`billeteraid`)
+    FOREIGN KEY (`billeteraid`) REFERENCES `billeteras`(`billeteraid`) ON DELETE CASCADE
 );
 
 CREATE TABLE `stacktrace`.`operaciones` ( 

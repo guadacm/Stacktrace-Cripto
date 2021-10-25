@@ -1,0 +1,9 @@
+package com.example.demo.repositries;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.demo.models.Usuario;
+
+public interface BilleteraRepository extends JpaRepository<Billetera,Long>{
+
+}

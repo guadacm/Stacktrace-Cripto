@@ -1,0 +1,69 @@
+package com.example.demo.models;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Entity
+@Table(name = "divisas")
+public class Divisa {
+
+    @Id
+    @Column(name = "divisatipo")
+    private String divisaTipo;
+
+    @Column(name = "divisavalor")
+    private float divisaValor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="divisatipo", nullable=false)
+    private SaldoDivisa saldoDivisa;
+    
+    @JsonIgnore
+    public SaldoDivisa getSaldoDivisa() {
+		return saldoDivisa;
+	}
+
+	public void setSaldoDivisa(SaldoDivisa saldoDivisa) {
+		this.saldoDivisa = saldoDivisa;
+	}
+
+	public Divisa() {
+    }
+
+    public Divisa(String divisaTipo, float divisaValor) {
+        this.divisaTipo = divisaTipo;
+        this.divisaValor = divisaValor;
+    }
+
+    @Schema(example = "ADA", description = "")
+    public String getDivisaTipo() {
+        return divisaTipo;
+    }
+
+    public void setDivisaTipo(String divisaTipo) {
+        this.divisaTipo = divisaTipo;
+    }
+
+    @Schema(example = "2146", description = "")
+    public float getDivisaValor() {
+        return divisaValor;
+    }
+
+    public void setDivisaValor(float divisaValor) {
+        this.divisaValor = divisaValor;
+    }
+
+    public void toUpperCase() {
+        this.divisaTipo = this.divisaTipo.toUpperCase();
+    }
+
+}
