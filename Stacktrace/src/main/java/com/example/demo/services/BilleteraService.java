@@ -20,4 +20,6 @@ public interface BilleteraService {
 
 	List<Billetera> getBilleteraHuerfanas();
 
+	float getSaldoUsuario(Long userId);
+
 }

@@ -29,7 +29,7 @@ public class DivisaServiceImpl implements DivisaService {
 	public boolean deleteDivisa(String divisaTipo) {
 		divisaTipo.toUpperCase();
 		Optional<Divisa> div = repository.findById(divisaTipo);
-		if (!div.isEmpty()) {
+		if (divisaTipo!="PESO" && !div.isEmpty()) {
 			// Borro la divisa de todas las billeteras existentes
 			List<SaldoDivisa> saldoDivisas = saldoDivisaRepository.findAllByDivisaTipo(divisaTipo);
 			if (!saldoDivisas.isEmpty()) {
@@ -73,7 +73,7 @@ public class DivisaServiceImpl implements DivisaService {
 			List<Billetera> billeteras = billeteraService.getBilleteras();
 			if (!billeteras.isEmpty()) {
 				for (int i = 0; i < billeteras.size(); i++) {
-					SaldoDivisa ad = new SaldoDivisa(divisa.getDivisaTipo(), billeteras.get(i));
+					SaldoDivisa ad = new SaldoDivisa(billeteras.get(i), divisa);
 					saldoDivisaRepository.save(ad);
 				}
 			}
@@ -85,8 +85,8 @@ public class DivisaServiceImpl implements DivisaService {
 	@Override
 	public Divisa update(Divisa divisa) {
 		divisa.toUpperCase();
-		Optional<Divisa> temp = repository.findById(divisa.getDivisaTipo());
-		if (!temp.isEmpty()) {
+		Optional<Divisa> temp = repository.findById(divisa.getDivisaTipo()); //Divisa con valor anterior
+		if (!divisa.getDivisaTipo().equals("PESO") && !temp.isEmpty()) {
 			float valorViejo = temp.get().getDivisaValor();
 			float aux;
 			Billetera billetera;

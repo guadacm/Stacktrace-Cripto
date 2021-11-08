@@ -1,0 +1,113 @@
+package com.example.demo.models;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Embeddable
+public class SaldoPK{
+	
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	@JoinColumn(name = "billeteraid", nullable = false)
+	private Billetera billetera;
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	@JoinColumn(name = "divisatipo", nullable = false)
+	private Divisa divisa;
+
+	public SaldoPK() {
+		super();
+	}
+
+	public SaldoPK(Billetera billetera, Divisa divisa) {
+		super();
+		this.billetera = billetera;
+		this.divisa = divisa;
+	}
+
+	public Billetera getBilletera() {
+		return billetera;
+	}
+
+	public void setBilletera(Billetera billetera) {
+		this.billetera = billetera;
+	}
+
+	public Divisa getDivisa() {
+		return divisa;
+	}
+
+	public void setDivisa(Divisa divisa) {
+		this.divisa = divisa;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(billetera, divisa);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SaldoPK other = (SaldoPK) obj;
+		return Objects.equals(billetera, other.billetera) && Objects.equals(divisa, other.divisa);
+	}
+	
+	/*@Column(name = "billeteraid")
+	protected Long billeteraId;
+	
+	@Column(name = "divisatipo")
+	protected String divisaTipo;
+
+	public SaldoPK() {	}
+
+	public SaldoPK(Long billeteraId, String divisaTipo) {
+		this.billeteraId = billeteraId;
+		this.divisaTipo = divisaTipo;
+	}
+
+	
+	public Long getBilleteraId() {
+		return billeteraId;
+	}
+
+	public void setBilleteraId(Long billeteraId) {
+		this.billeteraId = billeteraId;
+	}
+
+	public String getDivisaTipo() {
+		return divisaTipo;
+	}
+
+	public void setDivisaTipo(String divisaTipo) {
+		this.divisaTipo = divisaTipo;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(billeteraId, divisaTipo);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SaldoPK other = (SaldoPK) obj;
+		return Objects.equals(billeteraId, other.billeteraId) && Objects.equals(divisaTipo, other.divisaTipo);
+	}*/
+	
+}

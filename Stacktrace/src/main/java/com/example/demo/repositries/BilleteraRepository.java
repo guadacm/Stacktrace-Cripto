@@ -14,4 +14,7 @@ public interface BilleteraRepository extends JpaRepository<Billetera, Long> {
 
 	@Query("FROM Billetera WHERE userId = NULL")
 	List<Billetera> billeterasHuerfanas();
+	
+	@Query("SELECT SUM(saldoTotal) FROM Billetera WHERE userId = ?1")
+	float getSaldoUsuario(Long userId);
 }

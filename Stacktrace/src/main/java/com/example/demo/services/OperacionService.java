@@ -2,7 +2,8 @@ package com.example.demo.services;
 
 import java.util.List;
 
-import com.example.demo.models.Operacion;
+import com.example.demo.models.Deposito;
+import com.example.demo.models.Intercambio;
 
 public interface OperacionService {
 
@@ -10,11 +11,11 @@ public interface OperacionService {
 
 	float getSaldoUsuario(Long userId);
 
-	Operacion intercambioDivisa(Operacion operacion);
+	Intercambio intercambioDivisa(Intercambio intercambio);
 
-	List<Operacion> getIntercambios();
+	List<Intercambio> getIntercambios();
 
-	Operacion depositoDivisa(Operacion operacion);
+	Deposito depositoDivisa(Deposito deposito);
 
-	List<Operacion> getDepositos();
+	List<Deposito> getDepositos();
 }

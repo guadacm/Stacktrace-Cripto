@@ -1,9 +1,0 @@
-package com.example.demo.repositries;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.example.demo.models.SaldoDivisa;
-
-public interface SaldoDivisaRepository extends JpaRepository<SaldoDivisa,Long>{
-
-}

@@ -21,7 +21,6 @@ CREATE TABLE `stacktrace`.`divisas` (
 CREATE TABLE `stacktrace`.`billeteras` ( 
     `billeteraid` BIGINT NOT NULL AUTO_INCREMENT , 
     `userid` BIGINT DEFAULT NULL ,
-    `pesos` FLOAT NOT NULL ,
     `saldototal` FLOAT NOT NULL ,
     PRIMARY KEY (`billeteraid`),
     FOREIGN KEY (`userid`) REFERENCES `usuarios`(`userid`) ON DELETE SET NULL
@@ -33,18 +32,32 @@ CREATE TABLE `stacktrace`.`saldosdivisas` (
     `divisatipo` VARCHAR(10) NOT NULL , 
     `divisasaldo` FLOAT NOT NULL , 
     PRIMARY KEY (`saldosid`),
-    FOREIGN KEY (`billeteraid`) REFERENCES `billeteras`(`billeteraid`) ON DELETE CASCADE
+    FOREIGN KEY (`billeteraid`) REFERENCES `billeteras`(`billeteraid`) ON DELETE CASCADE,
+    FOREIGN KEY (`divisatipo`) REFERENCES `divisas`(`divisatipo`) ON DELETE CASCADE
 );
 
-CREATE TABLE `stacktrace`.`operaciones` ( 
+CREATE TABLE `stacktrace`.`intercambios` ( 
     `operacionid` BIGINT NOT NULL AUTO_INCREMENT , 
     `operacionfechahora` VARCHAR(100) NOT NULL , 
-    `operaciontipo` VARCHAR(15) NOT NULL , 
     `billeteraidorigen` BIGINT NULL , 
     `billeteraiddestino` BIGINT NOT NULL , 
     `divisatipoorigen` VARCHAR(10) NOT NULL , 
     `divisatipodestino` VARCHAR(10) NOT NULL , 
     `monto` FLOAT NOT NULL , 
-    PRIMARY KEY (`operacionid`)
+    PRIMARY KEY (`operacionid`),
+    FOREIGN KEY (`billeteraidorigen`) REFERENCES `billeteras`(`billeteraid`) ON DELETE CASCADE,
+    FOREIGN KEY (`divisatipoorigen`) REFERENCES `divisas`(`divisatipo`) ON DELETE CASCADE,
+    FOREIGN KEY (`billeteraiddestino`) REFERENCES `billeteras`(`billeteraid`) ON DELETE CASCADE,
+    FOREIGN KEY (`divisatipodestino`) REFERENCES `divisas`(`divisatipo`) ON DELETE CASCADE
 );
 
+CREATE TABLE `stacktrace`.`depositos` ( 
+    `operacionid` BIGINT NOT NULL AUTO_INCREMENT , 
+    `operacionfechahora` VARCHAR(100) NOT NULL , 
+    `billeteraiddestino` BIGINT NOT NULL , 
+    `divisatipodestino` VARCHAR(10) NOT NULL , 
+    `monto` FLOAT NOT NULL , 
+    PRIMARY KEY (`operacionid`),
+    FOREIGN KEY (`billeteraiddestino`) REFERENCES `billeteras`(`billeteraid`) ON DELETE CASCADE,
+    FOREIGN KEY (`divisatipodestino`) REFERENCES `divisas`(`divisatipo`) ON DELETE CASCADE
+);

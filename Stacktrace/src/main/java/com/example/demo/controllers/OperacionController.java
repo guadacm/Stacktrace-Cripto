@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.models.Operacion;
+import com.example.demo.models.Deposito;
+import com.example.demo.models.Intercambio;
 import com.example.demo.services.OperacionService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,38 +46,31 @@ public class OperacionController {
 		return operacionService.getSaldoUsuario(userId);
 	}
 
-	@Operation(summary = "Intercambio de divisas", description = "Ingrese los datos en el cuerpo de la peticion. divOrigen y divDestino puede ser \"PESO\" o algun tipo de divisa disponible en el sistema. El monto debe ser expresado en la divisa de origen del intercambio.")
+	@Operation(summary = "Intercambio de divisas", description = "Ingrese los datos en el cuerpo de la peticion. divOrigen y divDestino puede algun tipo de divisa disponible en el sistema. El monto debe ser expresado en la divisa de origen del intercambio. Si el intercambio tiene exito devuelve los datos registrados, sino devuelve null.")
 	@ApiResponses(value = { @ApiResponse(description = "successful operation", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = Operacion.class)) }) })
+			@Content(mediaType = "application/json", schema = @Schema(implementation = Intercambio.class)) }) })
 	@PostMapping(value = "/intercambio", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Operacion intercambioDivisa(@RequestBody Operacion operacion) {
-		return operacionService.intercambioDivisa(operacion);
+	public Intercambio intercambioDivisa(@RequestBody Intercambio intercambio) {
+		return operacionService.intercambioDivisa(intercambio);
 	}
 
 	@Operation(summary = "Listar intercambios", description = "Devuelve una lista de todos los intercambios realizados")
 	@GetMapping("/intercambio")
-	public List<Operacion> getIntercambios() {
+	public List<Intercambio> getIntercambios() {
 		return operacionService.getIntercambios();
 	}
 
-	@Operation(summary = "Deposito de divisa", description = "Ingrese los datos en el cuerpo de la peticion. divDestino puede ser \"PESO\" o algun tipo de divisa disponible en el sistema. El monto debe ser expresado en la divisa que se quiera depositar.")
+	@Operation(summary = "Deposito de divisa", description = "Ingrese los datos en el cuerpo de la peticion. El monto debe ser expresado en pesos. Si el deposito tiene exito devuelve los datos registrados, sino devuelve null")
 	@ApiResponses(value = { @ApiResponse(description = "successful operation", content = {
-			@Content(mediaType = "application/json", examples = {
-					@ExampleObject(value = "{\"bDestino\": 2,\"divOrigen\": \"peso\", \"divDestino\": \"peso\",\"monto\": 345}") }) }) }) // schema
-																																			// =
-																																			// @Schema(implementation
-																																			// =
-																																			// Operacion.class))
-																																			// })
-																																			// })
+			@Content(mediaType = "application/json", schema = @Schema(implementation = Deposito.class)) }) })
 	@PostMapping(value = "/deposito", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Operacion depositoDivisa(@RequestBody() Operacion operacion) {
-		return operacionService.depositoDivisa(operacion);
+	public Deposito depositoDivisa(@RequestBody() Deposito deposito) {
+		return operacionService.depositoDivisa(deposito);
 	}
 
 	@Operation(summary = "Listar depositos", description = "Devuelve una lista de todos los depositos realizados")
 	@GetMapping("/deposito")
-	public List<Operacion> getDepositos() {
+	public List<Deposito> getDepositos() {
 		return operacionService.getDepositos();
 	}
 

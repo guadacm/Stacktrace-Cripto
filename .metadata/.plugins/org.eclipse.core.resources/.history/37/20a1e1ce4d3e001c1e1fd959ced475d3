@@ -1,0 +1,43 @@
+package com.example.demo.models;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+public class SaldosPK implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
+	@Column(name = "billeteraid")
+	protected Long billeteraId;
+	
+	@Column(name = "divisatipo")
+	protected String divisaTipo;
+
+	public SaldosPK() {	}
+
+	public SaldosPK(Long billeteraId, String divisaTipo) {
+		this.billeteraId = billeteraId;
+		this.divisaTipo = divisaTipo;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(billeteraId, divisaTipo);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SaldoPK other = (SaldoPK) obj;
+		return Objects.equals(billeteraId, other.billeteraId) && Objects.equals(divisaTipo, other.divisaTipo);
+	}
+	
+}

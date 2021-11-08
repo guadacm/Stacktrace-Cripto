@@ -1,10 +1,14 @@
 package com.example.demo.models;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -38,6 +42,21 @@ public class Usuario {
 
 	@Column(name = "password")
 	private String password;
+
+	@OneToMany(mappedBy = "usuario", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	@Schema(hidden = true)
+	private List<Billetera> billeteras;
+	
+	public List<Billetera> getBilleteras() {
+		return billeteras;
+	}
+
+	public void setBilleteras(List<Billetera> billeteras) {
+		this.billeteras = billeteras;
+		for(Billetera txn : billeteras) {
+			txn.setUsuario(this);
+		}
+	}
 
 	public Usuario() {
 	}

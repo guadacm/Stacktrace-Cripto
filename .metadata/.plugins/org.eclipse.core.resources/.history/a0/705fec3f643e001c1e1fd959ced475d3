@@ -1,0 +1,5 @@
+package com.example.demo.repositries;
+
+public interface DepositoRepository {
+
+}

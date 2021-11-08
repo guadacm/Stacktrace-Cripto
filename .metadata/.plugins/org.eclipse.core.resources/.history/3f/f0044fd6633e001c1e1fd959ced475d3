@@ -1,0 +1,190 @@
+package com.example.demo.services;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.models.Billetera;
+import com.example.demo.models.Intercambio;
+import com.example.demo.models.SaldoDivisa;
+import com.example.demo.models.Usuario;
+import com.example.demo.repositries.OperacionRepository;
+import com.example.demo.repositries.SaldoDivisaRepository;
+
+@Service
+public class OperacionServiceImpl implements OperacionService {
+
+	@Autowired
+	OperacionRepository repository;
+
+	@Autowired
+	BilleteraService billeteraService;
+	
+	@Autowired
+	UsuarioService usuarioService;
+
+	@Autowired
+	DivisaService divisaService;
+
+	@Autowired
+	SaldoDivisaRepository saldoRepository;
+
+	@Override
+	public float getSaldoBilletera(Long billeteraId) {
+		Billetera billetera = billeteraService.getBilleteraById(billeteraId);
+		if (billetera != null)
+			return billetera.getSaldoTotal();
+		else
+			return -1;
+	}
+
+	@Override
+	public float getSaldoUsuario(Long userId) {
+		Usuario usuario = usuarioService.getUsuarioById(userId);		
+		//List<Billetera> billeteras = billeteraService.getBilleteraByUserId(userId);
+		//if (!billeteras.isEmpty())
+		if(usuario != null)
+			return repository.getSaldoUsuario(userId);
+		else
+			return -1;
+	}
+
+	// INTERCAMBIO DE DIVISAS
+	@Override
+	public Intercambio intercambioDivisa(Intercambio intercambio) {
+		intercambio.toUpperCase();
+		intercambio.setbOrigen(billeteraService.getBilleteraById(intercambio.getbOrigen().getBilleteraId()));
+		intercambio.setbDestino(billeteraService.getBilleteraById(intercambio.getbDestino().getBilleteraId()));
+		// Verifico que existan las billeteras de origen y destino
+		if(intercambio.getbOrigen() != null && intercambio.getbDestino() != null) {
+			intercambio.setDivOrigen(divisaService.getDivisaById(intercambio.getDivOrigen().getDivisaTipo()));
+			intercambio.setDivDestino(divisaService.getDivisaById(intercambio.getDivDestino().getDivisaTipo()));
+			// Verifico que existan las divisas de origen y destino
+			if(intercambio.getDivOrigen() != null && intercambio.getDivDestino() != null ) {
+				SaldoDivisa saldoOrigen;
+				for(int i=0; i<intercambio.getbOrigen().getSaldoDivisa().size(); i++) {
+					if(intercambio.getbOrigen().getSaldoDivisa().get(i).getDivisaTipo() == )
+				}
+			}else return null;
+		}else return null;
+		/*operacion.setOpTipo("INTERCAMBIO");
+		Billetera billeteraOrigen = billeteraService.getBilleteraById(operacion.getbOrigen());
+		Billetera billeteraDestino = billeteraService.getBilleteraById(operacion.getbDestino());
+		if (operacion.getDivOrigen().equals("PESO")) {
+			if (operacion.getMonto() <= billeteraOrigen.getPesos()) {
+				// actualizo origen
+				billeteraOrigen.setPesos((-1) * operacion.getMonto());
+				billeteraOrigen.setSaldoTotal((-1) * operacion.getMonto());
+				billeteraService.update(billeteraOrigen);
+				if (operacion.getDivDestino().equals("PESO")) { // PESO-PESO
+					// actualizo destino
+					billeteraDestino.setPesos(operacion.getMonto());
+					billeteraDestino.setSaldoTotal(operacion.getMonto());
+					billeteraService.update(billeteraDestino);
+				} else { // PESO-DIV
+					SaldoDivisa saldoDivisaDestino = repository.getSaldoDivisa(operacion.getbDestino(),
+							operacion.getDivDestino());
+					float costoDestino = divisaService.getDivisaById(operacion.getDivDestino()).getDivisaValor();
+					float deposito = (operacion.getMonto() / costoDestino);
+					// actualizo destino
+					saldoDivisaDestino.setDivisaSaldo(deposito);
+					billeteraDestino.setSaldoTotal(deposito);
+					saldoRepository.save(saldoDivisaDestino);
+					billeteraService.update(billeteraDestino);
+				}
+
+			} else {
+				return null;
+			}
+		} else {
+			SaldoDivisa saldoDivisaOrigen = repository.getSaldoDivisa(operacion.getbOrigen(), operacion.getDivOrigen());
+			float costoOrigen = divisaService.getDivisaById(operacion.getDivOrigen()).getDivisaValor();
+			if (operacion.getMonto() <= saldoDivisaOrigen.getDivisaSaldo()) {
+				// actualizo origen
+				saldoDivisaOrigen.setDivisaSaldo((-1) * operacion.getMonto());
+				saldoRepository.save(saldoDivisaOrigen);
+				billeteraOrigen.setSaldoTotal((-1) * operacion.getMonto());
+				billeteraService.update(billeteraOrigen);
+				if (operacion.getDivDestino().equals("PESO")) { // DIV-PESO
+					float deposito = operacion.getMonto() * costoOrigen;
+					// actualizo destino
+					billeteraDestino.setPesos(deposito);
+					billeteraDestino.setSaldoTotal(deposito);
+					billeteraService.update(billeteraDestino);
+				} else { // DIV-DIV
+					SaldoDivisa saldoDivisaDestino = repository.getSaldoDivisa(operacion.getbDestino(),
+							operacion.getDivDestino());
+					float costoDestino = divisaService.getDivisaById(operacion.getDivDestino()).getDivisaValor();
+					float deposito = (operacion.getMonto() * costoOrigen) / costoDestino;
+					// actualizo destino
+					saldoDivisaDestino.setDivisaSaldo(deposito);
+					billeteraDestino.setSaldoTotal(deposito);
+					saldoRepository.save(saldoDivisaDestino);
+					billeteraService.update(billeteraDestino);
+				}
+			} else {
+				return null;
+			}
+		}
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		operacion.setOpFechaHora(dtf.format(LocalDateTime.now()));*/
+		//return repository.save(operacion);
+	}
+
+	@Override
+	public List<Intercambio> getIntercambios() {
+		return repository.getIntercambios();
+	}
+
+	@Override
+	public Intercambio depositoDivisa(Intercambio operacion) {
+		operacion.toUpperCase();
+		operacion.setOpTipo("DEPOSITO");
+		Billetera billeteraDestino = billeteraService.getBilleteraById(operacion.getbDestino());
+		if (billeteraDestino != null) {
+			if (operacion.getDivOrigen().equals("PESO")) {
+				if (operacion.getDivDestino().equals("PESO")) { // PESO-PESO
+					billeteraDestino.setPesos(operacion.getMonto());
+					billeteraDestino.setSaldoTotal(operacion.getMonto());
+					billeteraService.update(billeteraDestino);
+				} else { // PESO-DIV
+					SaldoDivisa saldoDivisaDestino = repository.getSaldoDivisa(operacion.getbDestino(),
+							operacion.getDivDestino());
+					float costoDestino = divisaService.getDivisaById(operacion.getDivDestino()).getDivisaValor();
+					float deposito = operacion.getMonto() / costoDestino;
+					saldoDivisaDestino.setDivisaSaldo(deposito);
+					billeteraDestino.setSaldoTotal(deposito * costoDestino);
+					saldoRepository.save(saldoDivisaDestino);
+					billeteraService.update(billeteraDestino);
+				}
+			} else { // DIV-DIV
+				SaldoDivisa saldoDivisaDestino = repository.getSaldoDivisa(operacion.getbDestino(),
+						operacion.getDivDestino());
+				float costoOrigen = divisaService.getDivisaById(operacion.getDivOrigen()).getDivisaValor();
+				float costoDestino = divisaService.getDivisaById(operacion.getDivDestino()).getDivisaValor();
+				float deposito = (operacion.getMonto() * costoOrigen) / costoDestino;
+				// actualizo destino
+				saldoDivisaDestino.setDivisaSaldo(deposito);
+				billeteraDestino.setSaldoTotal(deposito * costoDestino);
+				saldoRepository.save(saldoDivisaDestino);
+				billeteraService.update(billeteraDestino);
+			}
+
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+			operacion.setOpFechaHora(dtf.format(LocalDateTime.now()));
+			//operacion.setbOrigen(-1L);
+			return repository.save(operacion);
+
+		} else
+			return null;
+	}
+
+	@Override
+	public List<Intercambio> getDepositos() {
+		return repository.getDepositos();
+	}
+
+}

@@ -48,6 +48,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 			Usuario nuevo = repository.save(usuario);
 			// Creo una billetera por defecto
 			billeteraService.registrarBilletera(nuevo.getUserId());
+			nuevo.setBilleteras(billeteraService.getBilleteraByUserId(nuevo.getUserId()));			
 			return nuevo;
 		} else
 			return null;

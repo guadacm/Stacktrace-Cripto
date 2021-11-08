@@ -14,5 +14,8 @@ public interface SaldoDivisaRepository extends JpaRepository<SaldoDivisa, Long> 
 
 	@Query("FROM SaldoDivisa WHERE billetera = ?1")
 	List<SaldoDivisa> findByBilletera(Billetera billetera);
+	
+	@Query("FROM SaldoDivisa WHERE billeteraId = ?1 AND divisaTipo = ?2")
+	public SaldoDivisa getSaldoDivisa(Long billeteraId, String divisaTipo);
 
 }

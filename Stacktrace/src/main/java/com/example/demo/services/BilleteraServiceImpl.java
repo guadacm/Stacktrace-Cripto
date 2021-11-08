@@ -52,7 +52,6 @@ public class BilleteraServiceImpl implements BilleteraService {
 			Billetera billetera = aux.get();
 			List<SaldoDivisa> saldos = saldoRepository.findByBilletera(billetera);
 			billetera.setSaldoDivisa(saldos);
-			;
 			return billetera;
 		} else
 			return null;
@@ -62,12 +61,12 @@ public class BilleteraServiceImpl implements BilleteraService {
 	public Billetera registrarBilletera(Long userId) {
 		Usuario usuario = usuarioService.getUsuarioById(userId);
 		if (usuario != null) {
-			Billetera nueva = new Billetera(0, 0, usuario);
+			Billetera nueva = new Billetera(0, usuario);
 			nueva = repository.save(nueva);
 			List<Divisa> divisas = divisaService.getDivisas();
 			List<SaldoDivisa> saldos = new ArrayList<SaldoDivisa>();
 			for (int i = 0; i < divisas.size(); i++) {
-				SaldoDivisa addDivisa = new SaldoDivisa(divisas.get(i).getDivisaTipo(), nueva);
+				SaldoDivisa addDivisa = new SaldoDivisa(nueva, divisas.get(i));
 				addDivisa = saldoRepository.save(addDivisa);
 				saldos.add(addDivisa);
 			}
@@ -103,5 +102,9 @@ public class BilleteraServiceImpl implements BilleteraService {
 		}
 		return billeteras;
 	}
-
+	
+	@Override
+	public float getSaldoUsuario(Long userId) {
+		return repository.getSaldoUsuario(userId);
+	}
 }

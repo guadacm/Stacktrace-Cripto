@@ -1,0 +1,20 @@
+package com.example.demo.services;
+
+import java.util.List;
+
+import com.example.demo.models.Intercambio;
+
+public interface OperacionService {
+
+	float getSaldoBilletera(Long billeteraId);
+
+	float getSaldoUsuario(Long userId);
+
+	Intercambio intercambioDivisa(Intercambio operacion);
+
+	List<Intercambio> getIntercambios();
+
+	Intercambio depositoDivisa(Intercambio operacion);
+
+	List<Intercambio> getDepositos();
+}

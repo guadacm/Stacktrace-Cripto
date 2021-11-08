@@ -10,8 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -22,10 +23,8 @@ public class Billetera {
 	public Billetera() {
 	}
 
-	public Billetera(float saldoTotal, float pesos, Usuario usuario) {
-		super();
+	public Billetera(float saldoTotal, Usuario usuario) {
 		this.saldoTotal = saldoTotal;
-		this.pesos = pesos;
 		this.usuario = usuario;
 	}
 
@@ -34,19 +33,20 @@ public class Billetera {
 	@Column(name = "billeteraid")
 	private Long billeteraId;
 
+	@Schema(hidden = true)
 	@Column(name = "saldototal")
 	private float saldoTotal;
 
-	@Column(name = "pesos")
-	private float pesos;
-
+	@Schema(hidden = true)
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
 	@JoinColumn(name = "userid")
 	private Usuario usuario;
 
-	@Transient
+	@Schema(hidden = true)
+	@OneToMany(mappedBy = "billetera", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
 	private List<SaldoDivisa> saldoDivisa;
-
+	
+	
 	public List<SaldoDivisa> getSaldoDivisa() {
 		return saldoDivisa;
 	}
@@ -57,15 +57,6 @@ public class Billetera {
 			txn.setBilletera(this);
 		}
 		this.saldoDivisa = saldoDivisa;
-	}
-
-	@Schema(example = "150.0", description = "")
-	public float getPesos() {
-		return pesos;
-	}
-
-	public void setPesos(float pesos) {
-		this.pesos += pesos;
 	}
 
 	@Schema(example = "1", description = "")
@@ -82,6 +73,7 @@ public class Billetera {
 		return saldoTotal;
 	}
 
+	@JsonIgnore
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -94,8 +86,4 @@ public class Billetera {
 		this.saldoTotal += saldoTotal;
 	}
 
-	@Override
-	public String toString() {
-		return "Billetera [billeteraId=" + billeteraId + ", saldoTotal=" + saldoTotal + ", pesos=" + pesos + "]";
-	}
 }

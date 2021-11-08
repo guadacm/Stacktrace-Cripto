@@ -1,0 +1,80 @@
+package com.example.demo.services;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.models.Billetera;
+import com.example.demo.models.Deposito;
+import com.example.demo.models.Intercambio;
+import com.example.demo.models.SaldoDivisa;
+import com.example.demo.models.Usuario;
+import com.example.demo.repositries.DepositoRepository;
+import com.example.demo.repositries.IntercambioRepository;
+import com.example.demo.repositries.OperacionRepository;
+import com.example.demo.repositries.SaldoDivisaRepository;
+
+@Service
+public class OperacionServiceImpl implements OperacionService {
+
+	@Autowired
+	IntercambioRepository intercambioRepo;
+	
+	@Autowired
+	DepositoRepository depositoRepo;
+
+	@Autowired
+	BilleteraService billeteraService;
+	
+	@Autowired
+	UsuarioService usuarioService;
+
+	@Autowired
+	DivisaService divisaService;
+
+	@Autowired
+	SaldoDivisaRepository saldoRepo;
+
+	@Override
+	public float getSaldoBilletera(Long billeteraId) {
+		Billetera billetera = billeteraService.getBilleteraById(billeteraId);
+		if (billetera != null)
+			return billetera.getSaldoTotal();
+		else
+			return -1;
+	}
+
+	@Override
+	public float getSaldoUsuario(Long userId) {
+		Usuario usuario = usuarioService.getUsuarioById(userId);		
+		if(usuario != null)
+			return billeteraService.getSaldoUsuario(userId);
+		else
+			return -1;
+	}
+
+	@Override
+	public List<Intercambio> getIntercambios() {
+		return intercambioRepo.findAll();// .getIntercambios();
+	}
+	@Override
+	public List<Deposito> getDepositos() {
+		return depositoRepo.findAll(); //.getDepositos();
+	}
+
+	@Override
+	public Intercambio intercambioDivisa(Intercambio operacion) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Intercambio depositoDivisa(Intercambio operacion) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

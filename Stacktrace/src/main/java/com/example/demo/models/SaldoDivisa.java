@@ -17,14 +17,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Entity
 @Table(name = "saldosdivisas")
 public class SaldoDivisa {
-
-	public SaldoDivisa(String divisaTipo, Billetera billetera) {
-		this.divisaTipo = divisaTipo;
-		this.divisaSaldo = 0;
-		this.billetera = billetera;
+	
+	public SaldoDivisa() {
 	}
 
-	public SaldoDivisa() {
+	public SaldoDivisa(Billetera billetera, Divisa divisa) {
+		this.divisaSaldo = 0;
+		this.billetera = billetera;
+		this.divisa = divisa;
 	}
 
 	@Schema(hidden = true)
@@ -33,15 +33,25 @@ public class SaldoDivisa {
 	@Column(name = "saldosid")
 	private Long saldoId;
 
-	@Column(name = "divisatipo")
-	private String divisaTipo;
-
+	@Schema(hidden = true)
 	@Column(name = "divisasaldo")
 	private float divisaSaldo;
 
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
 	@JoinColumn(name = "billeteraid", nullable = false)
 	private Billetera billetera;
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	@JoinColumn(name = "divisatipo", nullable = false)
+	private Divisa divisa;
+	
+	public Divisa getDivisa() {
+		return divisa;
+	}
+
+	public void setDivisa(Divisa divisa) {
+		this.divisa = divisa;
+	}
 
 	@JsonIgnore
 	public Billetera getBilletera() {
@@ -59,14 +69,6 @@ public class SaldoDivisa {
 
 	public void setSaldoId(Long saldoId) {
 		this.saldoId = saldoId;
-	}
-
-	public String getDivisaTipo() {
-		return divisaTipo;
-	}
-
-	public void setDivisaTipo(String divisaTipo) {
-		this.divisaTipo = divisaTipo;
 	}
 
 	public float getDivisaSaldo() {
